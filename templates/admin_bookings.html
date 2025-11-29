@@ -1,0 +1,44 @@
+{% extends "admin_base.html" %}
+{% block content %}
+
+<h2>Bookings</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Service</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Duration</th>
+        <th>Address</th>
+        <th>Notes</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for b in bookings %}
+    <tr>
+        <td>{{ b.full_name }}</td>
+        <td>{{ b.phone }}</td>
+        <td>{{ b.email }}</td>
+        <td>{{ b.service_type }}</td>
+        <td>{{ b.date }}</td>
+        <td>{{ b.time }}</td>
+        <td>{{ b.duration }}</td>
+        <td>{{ b.address }}</td>
+        <td>{{ b.notes }}</td>
+
+        <td><strong>{{ b.status }}</strong></td>
+
+        <td>
+            <a href="/admin/update/booking/{{ b.id }}/approved">Approve</a> |
+            <a href="/admin/update/booking/{{ b.id }}/rejected">Reject</a> |
+            <a href="/admin/update/booking/{{ b.id }}/completed">Done</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

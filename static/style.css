@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    margin: 0;
+  }
+  
+  .navbar {
+    background: #1d3557;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #eee;
+    padding: 10px;
+  }
+  
+  .login-box {
+    width: 300px;
+    margin: auto;
+    margin-top: 100px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  

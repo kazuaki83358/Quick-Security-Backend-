@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Safety Service - Admin Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1d3557;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .btn-box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .home-btn {
+            padding: 15px 25px;
+            background: #457b9d;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.2s;
+        }
+
+        .home-btn:hover {
+            background: #1d3557;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Quick Safety Service</h1>
+    <h3>Select where you want to go</h3>
+
+    <div class="btn-box">
+        <a class="home-btn" href="/admin/login">Admin Login</a>
+        <a class="home-btn" href="/admin/bookings">Bookings Panel</a>
+        <a class="home-btn" href="/admin/workers">Workers Panel</a>
+    </div>
+
+</body>
+</html>

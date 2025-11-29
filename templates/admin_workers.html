@@ -1,0 +1,59 @@
+{% extends "admin_base.html" %}
+{% block content %}
+
+<h2>Worker Applications</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>City</th>
+        <th>Service</th>
+        <th>Experience</th>
+        <th>Availability</th>
+        <th>Address</th>
+        <th>Aadhaar</th>
+        <th>PAN</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for w in workers %}
+    <tr>
+        <td>{{ w.full_name }}</td>
+        <td>{{ w.phone }}</td>
+        <td>{{ w.email }}</td>
+        <td>{{ w.city }}</td>
+        <td>{{ w.service_type }}</td>
+        <td>{{ w.experience }}</td>
+        <td>{{ w.availability }}</td>
+        <td>{{ w.address }}</td>
+
+        <td>
+            {% if w.aadhaar_url %}
+                <a href="{{ w.aadhaar_url }}" target="_blank">View Aadhaar</a>
+            {% else %}
+                Not uploaded
+            {% endif %}
+        </td>
+
+        <td>
+            {% if w.pan_url %}
+                <a href="{{ w.pan_url }}" target="_blank">View PAN</a>
+            {% else %}
+                Not uploaded
+            {% endif %}
+        </td>
+
+        <td><strong>{{ w.status }}</strong></td>
+
+        <td>
+            <a href="/admin/update/worker/{{ w.id }}/approved">Approve</a> |
+            <a href="/admin/update/worker/{{ w.id }}/rejected">Reject</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
