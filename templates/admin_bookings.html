@@ -3,8 +3,10 @@
 
 <h2>📅 Bookings</h2>
 
-<table> 
-    <thead> <tr>
+<div class="table-wrapper">
+<table>
+    <thead>
+        <tr>
             <th>Name</th>
             <th>Phone</th>
             <th>Email</th>
@@ -12,13 +14,15 @@
             <th>Date</th>
             <th>Time</th>
             <th>Duration</th>
-            <th>Address</th>
-            <th>Notes</th>
+            <th class="col-address">Address</th>
+            <th class="col-notes">Notes</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th class="actions-col">Actions</th>
         </tr>
     </thead>
-    <tbody> {% for b in bookings %}
+
+    <tbody>
+    {% for b in bookings %}
         <tr>
             <td>{{ b.full_name }}</td>
             <td>{{ b.phone }}</td>
@@ -27,23 +31,25 @@
             <td>{{ b.date }}</td>
             <td>{{ b.time }}</td>
             <td>{{ b.duration }}</td>
-            <td>{{ b.address }}</td>
-            <td>{{ b.notes }}</td>
+
+            <td class="wrap-text">{{ b.address }}</td>
+            <td class="wrap-text">{{ b.notes }}</td>
 
             <td class="status-cell">
-                <span class="status-{{ b.status | lower }}">
+                <span class="status-badge status-{{ b.status | lower }}">
                     {{ b.status }}
                 </span>
             </td>
 
             <td class="actions">
-                <a href="/admin/update/booking/{{ b.id }}/approved">Approve</a>
-                <a href="/admin/update/booking/{{ b.id }}/rejected">Reject</a>
-                <a href="/admin/update/booking/{{ b.id }}/completed">Done</a>
+                <a class="btn-approve" href="/admin/update/booking/{{ b.id }}/approved">Approve</a>
+                <a class="btn-reject" href="/admin/update/booking/{{ b.id }}/rejected">Reject</a>
+                <a class="btn-done" href="/admin/update/booking/{{ b.id }}/completed">Done</a>
             </td>
         </tr>
-        {% endfor %}
+    {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endblock %}

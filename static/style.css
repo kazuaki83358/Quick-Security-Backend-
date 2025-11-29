@@ -17,7 +17,7 @@ body {
     padding: 18px 40px;
     display: flex;
     gap: 40px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
 .navbar a {
@@ -48,21 +48,20 @@ body {
 .login-box {
     width: 380px;
     margin: 100px auto;
-    background: white;
+    background: #fff;
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     text-align: center;
 }
 
-.login-box input[type="text"],
-.login-box input[type="password"] {
+.login-box input {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
     border: 1px solid #d4dbe4;
     border-radius: 6px;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 .login-box input:focus {
@@ -76,11 +75,11 @@ body {
     background: #457b9d;
     border: none;
     border-radius: 6px;
-    color: white;
+    color: #fff;
     font-weight: 700;
     font-size: 1.1em;
-    transition: 0.3s;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .login-box button:hover {
@@ -93,7 +92,7 @@ body {
 ----------------------------------------------------- */
 .table-wrapper {
     width: 100%;
-    overflow-x: auto; /* Prevent overflow issues */
+    overflow-x: auto;
     padding-bottom: 20px;
 }
 
@@ -102,7 +101,7 @@ body {
 ----------------------------------------------------- */
 table {
     width: 100%;
-    min-width: 1200px; /* Prevent table breaking */
+    min-width: 1250px;
     background: #fff;
     border-collapse: separate;
     border-spacing: 0;
@@ -114,7 +113,7 @@ table {
 th, td {
     padding: 15px 18px;
     text-align: left;
-    white-space: nowrap;
+    vertical-align: top;
 }
 
 th {
@@ -128,48 +127,71 @@ th {
 
 td {
     border-bottom: 1px solid #ededed;
-    font-size: 0.95em;
 }
 
-/* Hover Effect */
+/* Hover */
 tbody tr:hover {
     background: #f0f4f8;
 }
 
 /* ---------------------------------------------------
-   FIXED COLUMN WIDTHS
+   FIXED COLUMN SIZES FOR CONSISTENT LAYOUT
 ----------------------------------------------------- */
 td:nth-child(1) { min-width: 140px; } /* Name */
 td:nth-child(2) { min-width: 130px; } /* Phone */
 td:nth-child(3) { min-width: 200px; } /* Email */
-td:nth-child(4) { min-width: 100px; } /* City */
-td:nth-child(5) { min-width: 120px; } /* Service */
-td:nth-child(6) { min-width: 120px; } /* Experience */
-td:nth-child(7) { min-width: 120px; } /* Availability */
-td:nth-child(8) { 
-    min-width: 220px; 
-    white-space: normal; 
-    word-wrap: break-word;
-} /* Address */
+td:nth-child(4) { min-width: 120px; } /* City / Service */
+td:nth-child(5) { min-width: 140px; }
+td:nth-child(6) { min-width: 120px; }
+td:nth-child(7) { min-width: 120px; }
 
-/* Aadhaar, PAN, Photo columns */
-td:nth-child(9),
+/* Address + Notes */
+.wrap-text,
+td:nth-child(8),
+td:nth-child(9) {
+    min-width: 220px;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* Document Columns (Aadhaar, PAN, Photo) */
+.col-doc,
 td:nth-child(10),
-td:nth-child(11) {
-    min-width: 80px;
+td:nth-child(11),
+td:nth-child(12) {
+    min-width: 110px;
     text-align: center;
 }
 
 /* Status */
-td:nth-child(12) {
-    min-width: 100px;
+td:nth-child(13) {
+    min-width: 110px;
 }
+
+/* ---------------------------------------------------
+   STATUS BADGES
+----------------------------------------------------- */
+.status-cell span {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.status-requested { background: #6c757d; }
+.status-approved  { background: #4CAF50; }
+.status-rejected  { background: #F44336; }
+.status-completed { background: #2196F3; }
 
 /* ---------------------------------------------------
    ACTION BUTTONS
 ----------------------------------------------------- */
 .actions {
-    min-width: 200px;
+    min-width: 240px;
     text-align: center;
     white-space: nowrap;
 }
@@ -177,24 +199,39 @@ td:nth-child(12) {
 .actions a {
     padding: 8px 12px;
     margin: 3px;
-    width: 80px;  /* Same width for all buttons */
+    width: 80px;
     display: inline-block;
     border-radius: 6px;
     font-size: 0.82em;
     font-weight: 600;
-    color: white;
+    color: #fff;
     text-decoration: none;
-    transition: 0.2s;
+    transition: 0.2s ease;
 }
 
 /* Approve */
-.btn-approve { background: #4CAF50; }
-.btn-approve:hover { background: #43A047; transform: translateY(-2px); }
+.btn-approve {
+    background: #4CAF50;
+}
+.btn-approve:hover {
+    background: #43A047;
+    transform: translateY(-2px);
+}
 
 /* Reject */
-.btn-reject { background: #F44336; }
-.btn-reject:hover { background: #E53935; transform: translateY(-2px); }
+.btn-reject {
+    background: #F44336;
+}
+.btn-reject:hover {
+    background: #E53935;
+    transform: translateY(-2px);
+}
 
 /* Done */
-.btn-done { background: #2196F3; }
-.btn-done:hover { background: #1E88E5; transform: translateY(-2px); }
+.btn-done {
+    background: #2196F3;
+}
+.btn-done:hover {
+    background: #1E88E5;
+    transform: translateY(-2px);
+}
