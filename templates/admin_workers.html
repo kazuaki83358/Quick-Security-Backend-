@@ -3,22 +3,27 @@
 
 <h2>Worker Applications</h2>
 
+<div class="table-wrapper">
 <table>
-    <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>City</th>
-        <th>Service</th>
-        <th>Experience</th>
-        <th>Availability</th>
-        <th>Address</th>
-        <th>Aadhaar</th>
-        <th>PAN</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Service</th>
+            <th>Experience</th>
+            <th>Availability</th>
+            <th class="col-address">Address</th>
+            <th class="col-doc">Aadhaar</th>
+            <th class="col-doc">PAN</th>
+            <th class="col-doc">Photo</th>
+            <th>Status</th>
+            <th class="actions-col">Actions</th>
+        </tr>
+    </thead>
 
+    <tbody>
     {% for w in workers %}
     <tr>
         <td>{{ w.full_name }}</td>
@@ -28,33 +33,44 @@
         <td>{{ w.service_type }}</td>
         <td>{{ w.experience }}</td>
         <td>{{ w.availability }}</td>
-        <td>{{ w.address }}</td>
 
-        <td>
+        <td class="wrap-text">{{ w.address }}</td>
+
+        <td class="col-doc">
             {% if w.aadhaar_url %}
-                <a href="{{ w.aadhaar_url }}" target="_blank">View Aadhaar</a>
+                <a href="{{ w.aadhaar_url }}" target="_blank">View</a>
             {% else %}
-                Not uploaded
+                —
             {% endif %}
         </td>
 
-        <td>
+        <td class="col-doc">
             {% if w.pan_url %}
-                <a href="{{ w.pan_url }}" target="_blank">View PAN</a>
+                <a href="{{ w.pan_url }}" target="_blank">View</a>
             {% else %}
-                Not uploaded
+                —
+            {% endif %}
+        </td>
+
+        <td class="col-doc">
+            {% if w.photo_url %}
+                <a href="{{ w.photo_url }}" target="_blank">View</a>
+            {% else %}
+                —
             {% endif %}
         </td>
 
         <td><strong>{{ w.status }}</strong></td>
 
         <td class="actions">
-            <a href="/admin/update/worker/{{ w.id }}/approved">Approve</a>
-            <a href="/admin/update/worker/{{ w.id }}/rejected">Reject</a>
-            <a href="/admin/update/worker/{{ w.id }}/completed">Done</a>
+            <a class="btn-approve" href="/admin/update/worker/{{ w.id }}/approved">Approve</a>
+            <a class="btn-reject" href="/admin/update/worker/{{ w.id }}/rejected">Reject</a>
+            <a class="btn-done" href="/admin/update/worker/{{ w.id }}/completed">Done</a>
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
+</div>
 
 {% endblock %}

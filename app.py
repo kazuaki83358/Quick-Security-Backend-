@@ -3,17 +3,18 @@ from flask_cors import CORS
 from config import Config
 from supabase_client import supabase
 from functools import wraps
+import time
 
 app = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 
-# Allow ALL origins (Postman, localhost, LAN, frontend)
+# Allow all origins
 CORS(app)
 
 
-# ============================
-# LOGIN REQUIRED DECORATOR
-# ============================
+# =======================================================
+# LOGIN REQUIRED
+# =======================================================
 def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -23,22 +24,17 @@ def login_required(f):
     return wrapper
 
 
-# ============================
-# HOME PAGE
-# ============================
+# =======================================================
+# PUBLIC ROUTES
+# =======================================================
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
-
-# ============================
-# PUBLIC API ENDPOINTS
-# ============================
-
-# ---------------------------------------
-# CUSTOMER BOOKING (JSON ONLY)
-# ---------------------------------------
+# =======================================================
+# BOOKING ENDPOINT
+# =======================================================
 @app.route("/api/bookings", methods=["POST"])
 def create_booking():
     data = request.json
@@ -64,38 +60,40 @@ def create_booking():
 
 
 
-# ---------------------------------------
-# WORKER APPLICATION (FORM + FILE UPLOAD)
-# ---------------------------------------
+# =======================================================
+# WORKER APPLICATION ENDPOINT
+# =======================================================
 @app.route("/api/workers", methods=["POST"])
 def create_worker():
-
     data = request.form
-    aadhaar_file = request.files.get("aadhaar")
-    pan_file = request.files.get("pan")
+
+    aadhaar_file = request.files.get("aadhar_card")
+    pan_file = request.files.get("pan_card")
     photo_file = request.files.get("photo")
 
     if not aadhaar_file or not pan_file or not photo_file:
         return jsonify({"error": "Aadhaar, PAN, and Photo are required"}), 400
 
     bucket = "worker-documents"
+    timestamp = str(int(time.time()))
+    worker_id = data.get("phone") + "_" + timestamp
 
-    # ------------------ Upload Aadhaar ------------------
-    aadhaar_path = f"aadhaar/{aadhaar_file.filename}"
+    # ------------------ Aadhaar Upload ------------------
+    aadhaar_path = f"aadhaar/{worker_id}_{aadhaar_file.filename}"
     supabase.storage.from_(bucket).upload(aadhaar_path, aadhaar_file.read())
     aadhaar_url = supabase.storage.from_(bucket).get_public_url(aadhaar_path)
 
-    # ------------------ Upload PAN ----------------------
-    pan_path = f"pan/{pan_file.filename}"
+    # ------------------ PAN Upload ------------------
+    pan_path = f"pan/{worker_id}_{pan_file.filename}"
     supabase.storage.from_(bucket).upload(pan_path, pan_file.read())
     pan_url = supabase.storage.from_(bucket).get_public_url(pan_path)
 
-    # ------------------ Upload PHOTO ----------------------
-    photo_path = f"photos/{photo_file.filename}"
+    # ------------------ Photo Upload ------------------
+    photo_path = f"photos/{worker_id}_{photo_file.filename}"
     supabase.storage.from_(bucket).upload(photo_path, photo_file.read())
     photo_url = supabase.storage.from_(bucket).get_public_url(photo_path)
 
-    # Worker Data
+    # Store data in DB
     worker = {
         "full_name": data.get("full_name"),
         "phone": data.get("phone"),
@@ -106,7 +104,7 @@ def create_worker():
         "availability": data.get("availability"),
         "address": data.get("address"),
         "certifications": data.get("certifications"),
-        "info": data.get("info"),
+        "info": data.get("additional_info"),
         "aadhaar_url": aadhaar_url,
         "pan_url": pan_url,
         "photo_url": photo_url,
@@ -115,22 +113,19 @@ def create_worker():
 
     supabase.table("workers").insert(worker).execute()
 
-    return jsonify({"message": "Application submitted"}), 201
+    return jsonify({"message": "Worker application submitted"}), 201
 
 
 
-
-# ============================
+# =======================================================
 # ADMIN PANEL
-# ============================
-
+# =======================================================
 @app.route("/admin")
 @login_required
 def admin_home():
     return redirect(url_for("admin_bookings"))
 
 
-# ---- LOGIN ----
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
@@ -146,43 +141,30 @@ def admin_login():
     return render_template("login.html")
 
 
-# ---- LOGOUT ----
 @app.route("/admin/logout")
 def admin_logout():
     session.clear()
     return redirect(url_for("admin_login"))
 
 
-# ---- BOOKINGS TABLE ----
 @app.route("/admin/bookings")
 @login_required
 def admin_bookings():
-    result = (
-        supabase
-        .table("bookings")
-        .select("*")
-        .order("created_at", desc=True)
-        .execute()
-    )
+    result = supabase.table("bookings").select("*").order("created_at", desc=True).execute()
     return render_template("admin_bookings.html", bookings=result.data)
 
 
-# ---- WORKERS TABLE ----
 @app.route("/admin/workers")
 @login_required
 def admin_workers():
-    result = (
-        supabase
-        .table("workers")
-        .select("*")
-        .order("created_at", desc=True)
-        .execute()
-    )
+    result = supabase.table("workers").select("*").order("created_at", desc=True).execute()
     return render_template("admin_workers.html", workers=result.data)
 
 
 
-# ---- UPDATE BOOKING STATUS ----
+# =======================================================
+# STATUS UPDATE ROUTES
+# =======================================================
 @app.route("/admin/update/booking/<id>/<status>")
 @login_required
 def update_booking_status(id, status):
@@ -190,7 +172,6 @@ def update_booking_status(id, status):
     return redirect(url_for("admin_bookings"))
 
 
-# ---- UPDATE WORKER STATUS ----
 @app.route("/admin/update/worker/<id>/<status>")
 @login_required
 def update_worker_status(id, status):
@@ -198,10 +179,8 @@ def update_worker_status(id, status):
     return redirect(url_for("admin_workers"))
 
 
-
-
-# ============================
+# =======================================================
 # RUN SERVER
-# ============================
+# =======================================================
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
