@@ -1,44 +1,238 @@
+/* --- General Body & Typography (Modern & Clean) --- */
 body {
-    font-family: Arial, sans-serif;
-    background: #f1f5f9;
+    /* Use a clean system font stack, prioritizing the previous 'Poppins' if loaded */
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f5f7fa; /* Consistent light background */
     margin: 0;
-  }
-  
-  .navbar {
-    background: #1d3557;
-    padding: 15px;
+    color: #333333; /* Darker, readable text color */
+    line-height: 1.6;
+}
+
+/* --- Navigation Bar (Header - Strong, Clear Identity) --- */
+.navbar {
+    background: #1d3557; /* Deep Navy/Indigo (Primary Brand Color) */
+    padding: 18px 40px; /* Increased padding for substantial height */
     display: flex;
-    gap: 20px;
-  }
-  
-  .navbar a {
-    color: white;
+    gap: 40px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Clearer shadow */
+}
+
+.navbar a {
+    color: #f1faee; 
     text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .container {
-    padding: 20px;
-  }
-  
-  table {
-    width: 100%;
-    background: white;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    border: 1px solid #eee;
-    padding: 10px;
-  }
-  
-  .login-box {
-    width: 300px;
+    font-weight: 600; 
+    font-size: 1.1em; /* Slightly larger links */
+    padding: 5px 0;
+    transition: color 0.3s ease, border-bottom 0.3s ease; /* Transition border effect too */
+}
+
+.navbar a:hover {
+    color: #457b9d; /* Teal Blue on hover */
+    /* Add a subtle underline effect for modern feel */
+    border-bottom: 2px solid #457b9d; 
+}
+
+/* --- Main Content Area --- */
+.container {
+    padding: 40px; 
+    max-width: 1400px; /* Wider container for data-heavy views */
+    margin: 0 auto; 
+}
+
+/* --- Login Box Styling (Elevated and Focused) --- */
+.login-box {
+    width: 380px; 
     margin: auto;
     margin-top: 100px;
-    background: white;
+    background: #ffffff;
+    padding: 40px; 
+    border-radius: 12px; /* Softer corners */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Strong, intentional shadow */
+    text-align: center;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #d4dbe4; /* Lighter border */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+.login-box input[type="text"]:focus,
+.login-box input[type="password"]:focus {
+    border-color: #457b9d; /* Highlight on focus */
+    outline: none;
+}
+
+.login-box button[type="submit"] {
+    background-color: #457b9d; /* Teal Blue (Action Color) */
+    color: white;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.login-box button[type="submit"]:hover {
+    background-color: #1d3557; /* Dark Navy Accent on hover */
+    transform: translateY(-1px); /* Subtle lift */
+}
+
+/* --- Search and Filter Bar Styling (Contained and Functional) --- */
+.filter-bar {
+    display: flex;
+    gap: 20px; 
+    align-items: center;
+    margin-bottom: 30px; 
     padding: 20px;
-    border-radius: 8px;
-  }
-  
+    background: #ffffff; 
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); 
+}
+
+.filter-bar input[type="text"] {
+    flex-grow: 1; 
+    padding: 10px 15px;
+    border: 1px solid #c8d3e1;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.filter-bar input[type="text"]:focus {
+    border-color: #457b9d; 
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2); /* Soft focus ring */
+}
+
+.filter-bar select {
+    padding: 10px 15px;
+    border: 1px solid #c8d3e1;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.filter-bar button {
+    background-color: #457b9d; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.filter-bar button:hover {
+    background-color: #1d3557; 
+    transform: translateY(-1px);
+}
+
+/* --- Data Table Styling (Clean and Professional) --- */
+table {
+    width: 100%;
+    background: #ffffff; 
+    border-collapse: separate; /* Use separate for border-radius on the header */
+    border-spacing: 0;
+    margin-top: 0;
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Clearer elevation */
+}
+
+th, td {
+    padding: 15px 18px; /* Increased padding */
+    text-align: left;
+}
+
+th {
+    /* Use the light teal as a distinctive, yet clean header background */
+    background: #e6eef4; 
+    color: #1d3557; 
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #c8d3e1; /* Clear separation from data */
+}
+
+td {
+    border-bottom: 1px solid #ededed; /* Very light separator */
+    font-size: 0.95em;
+}
+
+/* Remove border from the last row */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Row Hover Effect */
+tbody tr:hover {
+    background-color: #f0f4f8; /* Soft light background on hover */
+    transition: background-color 0.2s ease;
+}
+
+/* --- Action Buttons within Table Cells (Consistent and Visual) --- */
+.actions {
+    white-space: nowrap; 
+    min-width: 180px; /* Reduced space to tighten button grouping */
+}
+
+.actions a {
+    text-decoration: none;
+    padding: 6px 8px; 
+    margin: 3px 3px; 
+    border-radius: 4px; 
+    font-size: 0.82em;
+    font-weight: 600;
+    transition: all 0.2s ease; /* Unified transition */
+    display: inline-block; 
+    min-width: 48px; 
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Approve Button (Green) */
+.actions a:nth-child(1) { 
+    background-color: #4CAF50; /* Brighter Green */
+    color: white;
+    border: 1px solid #4CAF50;
+}
+.actions a:nth-child(1):hover {
+    background-color: #43A047; /* Darker green on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Reject Button (Red) */
+.actions a:nth-child(2) { 
+    background-color: #F44336; /* Bright Red */
+    color: white;
+    border: 1px solid #F44336;
+}
+.actions a:nth-child(2):hover {
+    background-color: #E53935; /* Darker red on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Done/Complete Button (Primary Blue) */
+.actions a:nth-child(3) { 
+    background-color: #2196F3; /* Primary Blue */
+    color: white;
+    border: 1px solid #2196F3; 
+}
+.actions a:nth-child(3):hover {
+    background-color: #1E88E5; /* Darker blue on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

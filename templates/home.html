@@ -1,59 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Quick Safety Service - Admin Portal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Quick Safety Service - Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <style>
+        /*
+        Color Palette:
+        Primary (Dark Blue/Teal): #2a6f8f (Strong, trustworthy)
+        Accent (Light Blue/Cyan): #4cc9f0 (Energetic, inviting)
+        Background: #f0f4f8 (Soft, light grey-blue)
+        Text: #333333 (Dark charcoal)
+        */
+
         body {
-            background: #f5f7fa;
-            font-family: Arial, sans-serif;
+            background: #f0f4f8; /* Soft light background */
+            font-family: 'Poppins', sans-serif; /* Modern font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
             padding: 40px;
+            border-radius: 15px; /* Softer rounded corners */
+            box-shadow: 0 10px 30px rgba(42, 111, 143, 0.15); /* Subtle shadow for depth */
+            max-width: 800px;
+            width: 100%;
             text-align: center;
         }
 
         h1 {
-            color: #1d3557;
-            font-size: 36px;
-            margin-bottom: 20px;
+            color: #2a6f8f; /* Primary color */
+            font-size: 44px;
+            font-weight: 700; /* Bold */
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
 
         h3 {
-            color: #555;
-            font-size: 18px;
-            margin-bottom: 30px;
+            color: #6c757d; /* Slightly muted text for subtitle */
+            font-size: 20px;
+            font-weight: 400; /* Lighter weight */
+            margin-bottom: 40px;
         }
 
         .btn-box {
             display: flex;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
             justify-content: center;
-            gap: 20px;
+            gap: 25px; /* Increased spacing */
         }
 
         .home-btn {
-            padding: 15px 25px;
-            background: #457b9d;
+            display: block; /* Make it a block for better padding/margin control */
+            width: 200px; /* Set a fixed width for uniformity */
+            padding: 18px 25px;
+            background: #2a6f8f; /* Primary background color */
             color: white;
             border-radius: 10px;
             border: none;
             text-decoration: none;
             font-size: 18px;
-            transition: 0.2s;
+            font-weight: 600; /* Semi-bold text */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            box-shadow: 0 4px 15px rgba(42, 111, 143, 0.3); /* Button shadow */
         }
 
         .home-btn:hover {
-            background: #1d3557;
+            background: #4cc9f0; /* Accent color on hover */
+            color: #2a6f8f; /* Darker text on lighter hover background */
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 0 8px 20px rgba(76, 201, 240, 0.4); /* Stronger shadow on hover */
+        }
+
+        /* Icon styling (Optional: requires a library like FontAwesome or SVGs) */
+        /* For this example, we'll use emojis for simplicity */
+        .home-btn-icon {
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Quick Safety Service</h1>
-    <h3>Select where you want to go</h3>
+    <div class="container">
+        <h1>Quick Safety Service</h1>
+        <h3>Select your administrative panel</h3>
 
-    <div class="btn-box">
-        <a class="home-btn" href="/admin/login">Admin Login</a>
-        <a class="home-btn" href="/admin/bookings">Bookings Panel</a>
-        <a class="home-btn" href="/admin/workers">Workers Panel</a>
+        <div class="btn-box">
+            <a class="home-btn" href="/admin/login">
+                <span class="home-btn-icon">🔑</span> Admin Login
+            </a>
+            <a class="home-btn" href="/admin/bookings">
+                <span class="home-btn-icon">🗓️</span> Bookings Panel
+            </a>
+            <a class="home-btn" href="/admin/workers">
+                <span class="home-btn-icon">👷</span> Workers Panel
+            </a>
+        </div>
     </div>
 
 </body>

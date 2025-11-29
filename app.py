@@ -7,7 +7,7 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 
-# Allow ALL origins (Postman, localhost, LAN, etc.)
+# Allow ALL origins (Postman, localhost, LAN, frontend)
 CORS(app)
 
 
@@ -29,6 +29,7 @@ def login_required(f):
 @app.route("/")
 def home():
     return render_template("home.html")
+
 
 
 # ============================
@@ -62,30 +63,39 @@ def create_booking():
     return jsonify({"message": "Booking submitted", "data": result.data}), 201
 
 
+
 # ---------------------------------------
 # WORKER APPLICATION (FORM + FILE UPLOAD)
 # ---------------------------------------
 @app.route("/api/workers", methods=["POST"])
 def create_worker():
+
     data = request.form
     aadhaar_file = request.files.get("aadhaar")
     pan_file = request.files.get("pan")
+    photo_file = request.files.get("photo")
 
-    if not aadhaar_file or not pan_file:
-        return jsonify({"error": "Aadhaar and PAN files required"}), 400
+    if not aadhaar_file or not pan_file or not photo_file:
+        return jsonify({"error": "Aadhaar, PAN, and Photo are required"}), 400
 
     bucket = "worker-documents"
 
-    # Upload Aadhaar
+    # ------------------ Upload Aadhaar ------------------
     aadhaar_path = f"aadhaar/{aadhaar_file.filename}"
     supabase.storage.from_(bucket).upload(aadhaar_path, aadhaar_file.read())
     aadhaar_url = supabase.storage.from_(bucket).get_public_url(aadhaar_path)
 
-    # Upload PAN
+    # ------------------ Upload PAN ----------------------
     pan_path = f"pan/{pan_file.filename}"
     supabase.storage.from_(bucket).upload(pan_path, pan_file.read())
     pan_url = supabase.storage.from_(bucket).get_public_url(pan_path)
 
+    # ------------------ Upload PHOTO ----------------------
+    photo_path = f"photos/{photo_file.filename}"
+    supabase.storage.from_(bucket).upload(photo_path, photo_file.read())
+    photo_url = supabase.storage.from_(bucket).get_public_url(photo_path)
+
+    # Worker Data
     worker = {
         "full_name": data.get("full_name"),
         "phone": data.get("phone"),
@@ -99,11 +109,15 @@ def create_worker():
         "info": data.get("info"),
         "aadhaar_url": aadhaar_url,
         "pan_url": pan_url,
+        "photo_url": photo_url,
         "status": "pending"
     }
 
     supabase.table("workers").insert(worker).execute()
+
     return jsonify({"message": "Application submitted"}), 201
+
+
 
 
 # ============================
@@ -167,6 +181,7 @@ def admin_workers():
     return render_template("admin_workers.html", workers=result.data)
 
 
+
 # ---- UPDATE BOOKING STATUS ----
 @app.route("/admin/update/booking/<id>/<status>")
 @login_required
@@ -181,6 +196,8 @@ def update_booking_status(id, status):
 def update_worker_status(id, status):
     supabase.table("workers").update({"status": status}).eq("id", id).execute()
     return redirect(url_for("admin_workers"))
+
+
 
 
 # ============================

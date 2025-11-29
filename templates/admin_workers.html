@@ -3,7 +3,7 @@
 
 <h2>Worker Applications</h2>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<table>
     <tr>
         <th>Name</th>
         <th>Phone</th>
@@ -48,9 +48,10 @@
 
         <td><strong>{{ w.status }}</strong></td>
 
-        <td>
-            <a href="/admin/update/worker/{{ w.id }}/approved">Approve</a> |
+        <td class="actions">
+            <a href="/admin/update/worker/{{ w.id }}/approved">Approve</a>
             <a href="/admin/update/worker/{{ w.id }}/rejected">Reject</a>
+            <a href="/admin/update/worker/{{ w.id }}/completed">Done</a>
         </td>
     </tr>
     {% endfor %}
