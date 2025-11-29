@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, session, url_for
 from flask_cors import CORS
+import os
 from config import Config
 from supabase_client import supabase
 from functools import wraps
@@ -8,13 +9,26 @@ import time
 app = Flask(__name__)
 app.secret_key = Config.SECRET_KEY
 
-# Allow all origins
-CORS(app)
+# ================================
+# CORS CONFIG
+# ================================
+allowed_origin = getattr(Config, "ALLOWED_ORIGIN", "*")
+
+if isinstance(allowed_origin, str) and "," in allowed_origin:
+    origins = [o.strip() for o in allowed_origin.split(",") if o.strip()]
+else:
+    origins = allowed_origin
+
+# FIXED CORS (Important for Render + Netlify)
+CORS(app, resources={r"/api/*": {"origins": origins}}, supports_credentials=True)
+
+# Optional larger request size
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20MB
 
 
-# =======================================================
-# LOGIN REQUIRED
-# =======================================================
+# ================================
+# LOGIN REQUIRED DECORATOR
+# ================================
 def login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -24,17 +38,17 @@ def login_required(f):
     return wrapper
 
 
-# =======================================================
-# PUBLIC ROUTES
-# =======================================================
+# ================================
+# PUBLIC ROUTE
+# ================================
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
-# =======================================================
-# BOOKING ENDPOINT
-# =======================================================
+# ================================
+# BOOKING API
+# ================================
 @app.route("/api/bookings", methods=["POST"])
 def create_booking():
     data = request.json
@@ -59,10 +73,9 @@ def create_booking():
     return jsonify({"message": "Booking submitted", "data": result.data}), 201
 
 
-
-# =======================================================
-# WORKER APPLICATION ENDPOINT
-# =======================================================
+# ================================
+# WORKER API (Uploads + Form Data)
+# ================================
 @app.route("/api/workers", methods=["POST"])
 def create_worker():
     data = request.form
@@ -78,22 +91,21 @@ def create_worker():
     timestamp = str(int(time.time()))
     worker_id = data.get("phone") + "_" + timestamp
 
-    # ------------------ Aadhaar Upload ------------------
+    # Aadhaar Upload
     aadhaar_path = f"aadhaar/{worker_id}_{aadhaar_file.filename}"
     supabase.storage.from_(bucket).upload(aadhaar_path, aadhaar_file.read())
     aadhaar_url = supabase.storage.from_(bucket).get_public_url(aadhaar_path)
 
-    # ------------------ PAN Upload ------------------
+    # PAN Upload
     pan_path = f"pan/{worker_id}_{pan_file.filename}"
     supabase.storage.from_(bucket).upload(pan_path, pan_file.read())
     pan_url = supabase.storage.from_(bucket).get_public_url(pan_path)
 
-    # ------------------ Photo Upload ------------------
+    # Photo Upload
     photo_path = f"photos/{worker_id}_{photo_file.filename}"
     supabase.storage.from_(bucket).upload(photo_path, photo_file.read())
     photo_url = supabase.storage.from_(bucket).get_public_url(photo_path)
 
-    # Store data in DB
     worker = {
         "full_name": data.get("full_name"),
         "phone": data.get("phone"),
@@ -116,10 +128,9 @@ def create_worker():
     return jsonify({"message": "Worker application submitted"}), 201
 
 
-
-# =======================================================
+# ================================
 # ADMIN PANEL
-# =======================================================
+# ================================
 @app.route("/admin")
 @login_required
 def admin_home():
@@ -161,10 +172,9 @@ def admin_workers():
     return render_template("admin_workers.html", workers=result.data)
 
 
-
-# =======================================================
-# STATUS UPDATE ROUTES
-# =======================================================
+# ================================
+# STATUS UPDATE
+# ================================
 @app.route("/admin/update/booking/<id>/<status>")
 @login_required
 def update_booking_status(id, status):
@@ -179,8 +189,10 @@ def update_worker_status(id, status):
     return redirect(url_for("admin_workers"))
 
 
-# =======================================================
-# RUN SERVER
-# =======================================================
+# ================================
+# RUN SERVER (Render Compatible)
+# ================================
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    port = int(os.getenv("PORT", 5000))
+    debug_env = os.getenv("DEBUG", "False").lower() in ("1", "true", "yes")
+    app.run(debug=debug_env, host="0.0.0.0", port=port)
