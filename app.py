@@ -188,6 +188,13 @@ def update_worker_status(id, status):
     supabase.table("workers").update({"status": status}).eq("id", id).execute()
     return redirect(url_for("admin_workers"))
 
+# ================================
+# HEALTH CHECK (For Render + UptimeRobot)
+# ================================
+@app.route("/health")
+def health():
+    return {"status": "ok"}, 200
+
 
 # ================================
 # RUN SERVER (Render Compatible)
